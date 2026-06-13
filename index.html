@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Valorant Session Tracker</title>
+
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+        <h1>Valorant Session Tracker</h1>
+
+        <input id="agentInput" type="text" placeholder="Agent">
+
+        <br>
+
+        <input id="mapInput" type="text" placeholder="Map">
+
+        <br>
+
+        <input id="winRadio" type="radio" name="result" value="Win">
+        <label for="winRadio">Win</label>
+
+        <input id="lossRadio" type="radio" name="result" value="Loss">
+        <label for="lossRadio">Loss</label>
+
+        <br>
+
+        <input id="rrChangeInput" type="text" placeholder="RR Change">
+
+        <br>
+
+        <input id="killsInput" type="text" placeholder="Kills">
+
+        <br>
+
+        <input id="deathsInput" type="text" placeholder="Deaths">
+
+        <br>
+
+        <input id="assistsInput" type="text" placeholder="Assists">
+
+        <br>
+
+        <button id="saveMatchButton">Save Match</button>
+
+        <br>
+
+        <ul id="matchHistoryList"></ul>
+
+        <script src="script.js"></script>
+    </body>
+</html>

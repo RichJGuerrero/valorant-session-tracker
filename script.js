@@ -7,6 +7,7 @@ const assistsInput = document.getElementById("assistsInput");
 const saveMatchButton = document.getElementById("saveMatchButton");
 const winRadio = document.getElementById("winRadio");
 const lossRadio = document.getElementById("lossRadio");
+const netRR = document.getElementById("netRR");
 
 const savedMatchHistory = localStorage.getItem("matchHistory");
 
@@ -38,13 +39,27 @@ saveMatchButton.addEventListener("click", function() {
     matchHistory.push(match);
     localStorage.setItem("matchHistory", JSON.stringify(matchHistory));
     renderMatches();
+
+    agentInput.value = "";
+    mapInput.value = "";
+    rrChangeInput.value = "";
+    killsInput.value = "";
+    deathsInput.value = "";
+    assistsInput.value = "";
+
+    winRadio.checked = false;
+    lossRadio.checked=false;
 });
 
 function renderMatches() {
     matchHistoryList.innerHTML = "";
 
+    let totalRR = 0;
+
     for (let index = 0; index < matchHistory.length; index++) {
         const match = matchHistory[index];
+
+        totalRR = totalRR + parseInt(match.rrChange);
 
         const newMatch = document.createElement("li");
 
@@ -73,6 +88,8 @@ function renderMatches() {
 
             matchHistoryList.appendChild(newMatch);
     }
+
+    netRR.textContent = "Net RR: " + totalRR;
 }
 
 renderMatches();

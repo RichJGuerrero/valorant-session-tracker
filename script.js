@@ -8,7 +8,13 @@ const saveMatchButton = document.getElementById("saveMatchButton");
 const winRadio = document.getElementById("winRadio");
 const lossRadio = document.getElementById("lossRadio");
 
+const savedMatchHistory = localStorage.getItem("matchHistory");
+
 let matchHistory = [];
+
+if (savedMatchHistory !== null) {
+    matchHistory = JSON.parse(savedMatchHistory);
+}
 
 saveMatchButton.addEventListener("click", function() {
     let result = "";
@@ -30,13 +36,16 @@ saveMatchButton.addEventListener("click", function() {
         assists: assistsInput.value
     }
     matchHistory.push(match);
+    localStorage.setItem("matchHistory", JSON.stringify(matchHistory));
     renderMatches();
 });
 
 function renderMatches() {
     matchHistoryList.innerHTML = "";
 
-    for (const match of matchHistory) {
+    for (let index = 0; index < matchHistory.length; index++) {
+        const match = matchHistory[index];
+
         const newMatch = document.createElement("li");
 
         newMatch.textContent = 
@@ -48,6 +57,22 @@ function renderMatches() {
             match.deaths + "/" +
             match.assists;
 
-        matchHistoryList.appendChild(newMatch);
+            const deleteButton = document.createElement("button")
+
+            deleteButton.textContent = "Delete";
+
+            deleteButton.addEventListener("click", function() {
+                matchHistory.splice(index, 1);
+
+                localStorage.setItem("matchHistory", JSON.stringify(matchHistory));
+
+                renderMatches();
+            });
+
+            newMatch.appendChild(deleteButton);
+
+            matchHistoryList.appendChild(newMatch);
     }
 }
+
+renderMatches();

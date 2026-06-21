@@ -5,19 +5,38 @@ const killsInput = document.getElementById("killsInput");
 const deathsInput = document.getElementById("deathsInput");
 const assistsInput = document.getElementById("assistsInput");
 const saveMatchButton = document.getElementById("saveMatchButton");
+const startSessionButton = document.getElementById("startSessionButton");
+const endSessionButton = document.getElementById("endSessionButton");
 const winRadio = document.getElementById("winRadio");
 const lossRadio = document.getElementById("lossRadio");
 const netRR = document.getElementById("netRR");
+const sessionStatus = document.getElementById("sessionStatus");
+const matchHistoryList = document.getElementById("matchHistoryList");
 
-const savedMatchHistory = localStorage.getItem("matchHistory");
+let sessions = [];
+let activeSessionId = null;
 
-let matchHistory = [];
+const savedSessions = localStorage.getItem("sessions");
 
-if (savedMatchHistory !== null) {
-    matchHistory = JSON.parse(savedMatchHistory);
+if (savedSessions !== null) {
+    sessions = JSON.parse(savedSessions);
+}
+
+const savedActiveSessionId = localStorage.getItem("activeSessionId");
+
+if (savedActiveSessionId !== null) {
+    activeSessionId = parseInt(savedActiveSessionId);
+    sessionStatus.textContent = "Session Active";
+    startSessionButton.disabled = true;
+    endSessionButton.disabled = false;
 }
 
 saveMatchButton.addEventListener("click", function() {
+    if (activeSessionId === null) {
+        sessionStatus.textContent = "No active session. Please start a session.";
+        return;
+    }
+
     let result = "";
 
     if (winRadio.checked) {
@@ -36,8 +55,17 @@ saveMatchButton.addEventListener("click", function() {
         deaths: deathsInput.value,
         assists: assistsInput.value
     }
-    matchHistory.push(match);
-    localStorage.setItem("matchHistory", JSON.stringify(matchHistory));
+
+    for (let index = 0; index < sessions.length; index++) {
+        const currentSession = sessions[index];
+
+        if (currentSession.id === activeSessionId) {
+            currentSession.matches.push(match);
+            break;
+        }
+    }
+
+    localStorage.setItem("sessions", JSON.stringify(sessions));
     renderMatches();
 
     agentInput.value = "";
@@ -48,7 +76,7 @@ saveMatchButton.addEventListener("click", function() {
     assistsInput.value = "";
 
     winRadio.checked = false;
-    lossRadio.checked=false;
+    lossRadio.checked = false;
 });
 
 function renderMatches() {
@@ -56,40 +84,134 @@ function renderMatches() {
 
     let totalRR = 0;
 
-    for (let index = 0; index < matchHistory.length; index++) {
-        const match = matchHistory[index];
+    for (let sessionIndex = 0; sessionIndex < sessions.length; sessionIndex++) {
+        const currentSession = sessions[sessionIndex];
 
-        totalRR = totalRR + parseInt(match.rrChange);
+        const sessionItem = document.createElement("li");
 
-        const newMatch = document.createElement("li");
+        const deleteSessionButton = document.createElement("button");
 
-        newMatch.textContent = 
-            match.agent + " | " +
-            match.map + " | " +
-            match.result + " | " +
-            match.rrChange + " RR | " +
-            match.kills + "/" +
-            match.deaths + "/" +
-            match.assists;
+        deleteSessionButton.textContent = "Delete Session";
 
-            const deleteButton = document.createElement("button")
+        deleteSessionButton.addEventListener("click", function() {
+            sessions.splice(sessionIndex, 1);
+
+            if (currentSession.id === activeSessionId) {
+
+                activeSessionId = null;
+
+                localStorage.removeItem("activeSessionId");
+
+                sessionStatus.textContent = "No Active Session";
+
+                startSessionButton.disabled = false;
+                endSessionButton.disabled = true;
+            }
+
+            localStorage.setItem("sessions", JSON.stringify(sessions));
+
+            renderMatches();
+
+        });
+
+
+        let sessionRR = 0;
+
+        const sessionMatchList = document.createElement("ul");
+
+        for (let matchIndex = 0; matchIndex < currentSession.matches.length; matchIndex++) {
+            const match = currentSession.matches[matchIndex];
+
+            sessionRR = sessionRR + parseInt(match.rrChange);
+
+        if (currentSession.id === activeSessionId) {
+            totalRR = totalRR + parseInt(match.rrChange);
+        }
+
+            const newMatch = document.createElement("li");
+
+            newMatch.textContent =
+                match.agent + " | " +
+                match.map + " | " +
+                match.result + " | " +
+                match.rrChange + " RR | " +
+                match.kills + "/" +
+                match.deaths + "/" +
+                match.assists;
+
+            const deleteButton = document.createElement("button");
 
             deleteButton.textContent = "Delete";
 
             deleteButton.addEventListener("click", function() {
-                matchHistory.splice(index, 1);
+                currentSession.matches.splice(matchIndex, 1);
 
-                localStorage.setItem("matchHistory", JSON.stringify(matchHistory));
+                localStorage.setItem("sessions", JSON.stringify(sessions));
 
                 renderMatches();
             });
 
             newMatch.appendChild(deleteButton);
 
-            matchHistoryList.appendChild(newMatch);
+            sessionMatchList.appendChild(newMatch);
+
+        }
+
+        sessionItem.textContent = "Session | Net RR: " + sessionRR;
+
+        sessionItem.appendChild(deleteSessionButton);
+
+        sessionItem.appendChild(sessionMatchList);
+
+
+        matchHistoryList.appendChild(sessionItem);
     }
 
     netRR.textContent = "Net RR: " + totalRR;
 }
+
+startSessionButton.addEventListener("click", function() {
+    const newSession = {
+        id: sessions.length + 1,
+        startedAt: new Date().toISOString(),
+        endedAt: null,
+        matches: []
+    };
+
+    sessions.push(newSession);
+
+    activeSessionId = newSession.id;
+
+    localStorage.setItem("activeSessionId", activeSessionId)
+
+    sessionStatus.textContent = "Session Active";
+
+    startSessionButton.disabled = true;
+    endSessionButton.disabled = false;
+});
+
+endSessionButton.addEventListener("click", function () {
+    for (let index = 0; index < sessions.length; index++) {
+        const currentSession = sessions[index];
+
+        if (currentSession.id === activeSessionId) {
+            currentSession.endedAt = new Date().toISOString();
+            break;
+        }
+    }
+
+    activeSessionId = null;
+
+    localStorage.removeItem("activeSessionId");
+
+    localStorage.setItem("sessions", JSON.stringify(sessions));
+
+    sessionStatus.textContent = "No Active Session";
+
+    startSessionButton.disabled = false;
+    endSessionButton.disabled = true;
+
+    renderMatches();
+});
 
 renderMatches();

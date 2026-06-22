@@ -94,6 +94,12 @@ function renderMatches() {
         deleteSessionButton.textContent = "Delete Session";
 
         deleteSessionButton.addEventListener("click", function() {
+            const confirmed = confirm("Delete this session?");
+
+            if (confirmed === false) {
+                return;
+            }
+
             sessions.splice(sessionIndex, 1);
 
             if (currentSession.id === activeSessionId) {
@@ -144,7 +150,25 @@ function renderMatches() {
             deleteButton.textContent = "Delete";
 
             deleteButton.addEventListener("click", function() {
+                const confirmed = confirm("Delete This Match?");
+
+                if (confirmed === false) {
+                    return;
+                }
+
                 currentSession.matches.splice(matchIndex, 1);
+
+            if (currentSession.matches.length === 0) {
+                sessions.splice(sessionIndex, 1);
+
+                if (currentSession.id === activeSessionId) {
+                    activeSessionId = null;
+                    localStorage.removeItem("activeSessionId");
+                    sessionStatus.textContent = "No Active Session";
+                    startSessionButton.disabled = false;
+                    endSessionButton.disabled = true;
+            }
+        }
 
                 localStorage.setItem("sessions", JSON.stringify(sessions));
 
@@ -195,10 +219,27 @@ endSessionButton.addEventListener("click", function () {
         const currentSession = sessions[index];
 
         if (currentSession.id === activeSessionId) {
-            currentSession.endedAt = new Date().toISOString();
+
+            if (currentSession.matches.length === 0) {
+                    sessions.splice(index, 1);
+                } else {
+                    currentSession.endedAt = new Date().toISOString();
+
+                };
+
+                if (currentSession.id === activeSessionId) {
+                    activeSessionId = null;
+
+                    localStorage.removeItem("activeSessionId");
+
+                    sessionStatus.textContent = "No Active Session";
+
+                    startSessionButton.disabled = false;
+                    endSessionButton.disabled = true;
+                }
             break;
-        }
-    }
+        };
+    };
 
     activeSessionId = null;
 

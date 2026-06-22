@@ -1,0 +1,44 @@
+body {
+    background-color: #0f1923;
+    color: white;
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 40px;
+}
+
+input[type="text"] {
+    display: block;
+    margin-top: 18px;
+    padding: 8px;
+    width: 200px;
+}
+
+button {
+    background-color: red;
+    color: white;
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;   
+    margin: 6px 6px 6px 15px;
+    padding: 0px 12px;
+    cursor: pointer;
+}
+
+ul {
+    padding-left: 20px;;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+select {
+    display: block;
+    padding: 2px;;
+}

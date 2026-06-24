@@ -10,6 +10,7 @@ const endSessionButton = document.getElementById("endSessionButton");
 const winRadio = document.getElementById("winRadio");
 const lossRadio = document.getElementById("lossRadio");
 const netRR = document.getElementById("netRR");
+const sessionSummary = document.getElementById("sessionSummary");
 const sessionStatus = document.getElementById("sessionStatus");
 const matchHistoryList = document.getElementById("matchHistoryList");
 
@@ -83,8 +84,10 @@ function renderMatches() {
     matchHistoryList.innerHTML = "";
 
     let totalRR = 0;
+    let wins = 0;
+    let losses = 0;
 
-    for (let sessionIndex = 0; sessionIndex < sessions.length; sessionIndex++) {
+    for (let sessionIndex = sessions.length - 1; sessionIndex >= 0; sessionIndex--) {
         const currentSession = sessions[sessionIndex];
 
         const sessionItem = document.createElement("li");
@@ -122,6 +125,8 @@ function renderMatches() {
 
 
         let sessionRR = 0;
+        let sessionWins = 0;
+        let sessionLosses = 0;
 
         const sessionMatchList = document.createElement("ul");
 
@@ -130,9 +135,24 @@ function renderMatches() {
 
             sessionRR = sessionRR + parseInt(match.rrChange);
 
+            if (match.result === "Win") {
+                sessionWins++;
+            } else if (match.result === "Loss") {
+                sessionLosses++;
+            }
+
+
         if (currentSession.id === activeSessionId) {
             totalRR = totalRR + parseInt(match.rrChange);
+
+
+            if (match.result === "Win") {
+                wins++;
+            } else if (match.result === "Loss") {
+                losses++;
+            }
         }
+
 
             const newMatch = document.createElement("li");
 
@@ -181,7 +201,19 @@ function renderMatches() {
 
         }
 
-        sessionItem.textContent = "Session | Net RR: " + sessionRR;
+        const sessionTotalGames = sessionWins + sessionLosses;
+
+        let sessionWinRate = 0;
+
+        if (sessionTotalGames > 0) {
+            sessionWinRate = (sessionWins / sessionTotalGames) * 100;
+        }
+
+        sessionItem.textContent = 
+            "Session | Net RR: " + sessionRR +
+            " | Wins: " + sessionWins +
+            " | Losses: " + sessionLosses +
+            " | Win Rate: " + sessionWinRate.toFixed(1) + "%";
 
         sessionItem.appendChild(deleteSessionButton);
 
@@ -191,7 +223,21 @@ function renderMatches() {
         matchHistoryList.appendChild(sessionItem);
     }
 
+    const totalGames = wins + losses;
+
+    let winRate = 0;
+
+    if (totalGames > 0) {
+     winRate = (wins / totalGames) * 100;
+    }
+
+    sessionSummary.textContent =
+        "Wins: " + wins +
+        " | Losses: " + losses +
+        " | Win Rate: " + winRate.toFixed(1) + "%";
+
     netRR.textContent = "Net RR: " + totalRR;
+
 }
 
 startSessionButton.addEventListener("click", function() {

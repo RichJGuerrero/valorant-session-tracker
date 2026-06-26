@@ -137,7 +137,7 @@ function renderMatches() {
             const match = currentSession.matches[matchIndex];
 
             sessionRR = sessionRR + parseInt(match.rrChange);
-            sessionionKills = sessionKills + parseInt(match.kills);
+            sessionKills = sessionKills + parseInt(match.kills);
             sessionDeaths = sessionDeaths + parseInt(match.deaths);
             sessionAssists = sessionAssists + parseInt(match.assists);
 

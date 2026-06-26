@@ -40,3 +40,22 @@ or
 1. Open the project in VS Code
 2. Use Live Server
 3. Open the local development URL
+
+## Version History
+
+### v0.2.0
+- Added session tracking
+- Added persistent active sessions
+- Added session deletion and match deletion
+- Added confirmation before deleting
+- Added agent and map dropdowns
+- Added basic UI styling
+- Added newest-session-first display
+- Added Net RR, Wins, Losses, and Win Rate stats
+
+### Planned v0.3.0
+- Average kills/deaths/assists
+- K/D ratio
+- Average RR per match
+- Session notes
+- Basic coaching insights

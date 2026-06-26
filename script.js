@@ -127,6 +127,9 @@ function renderMatches() {
         let sessionRR = 0;
         let sessionWins = 0;
         let sessionLosses = 0;
+        let sessionKills = 0;
+        let sessionDeaths = 0;
+        let sessionAssists = 0;
 
         const sessionMatchList = document.createElement("ul");
 
@@ -134,6 +137,9 @@ function renderMatches() {
             const match = currentSession.matches[matchIndex];
 
             sessionRR = sessionRR + parseInt(match.rrChange);
+            sessionionKills = sessionKills + parseInt(match.kills);
+            sessionDeaths = sessionDeaths + parseInt(match.deaths);
+            sessionAssists = sessionAssists + parseInt(match.assists);
 
             if (match.result === "Win") {
                 sessionWins++;
@@ -205,15 +211,26 @@ function renderMatches() {
 
         let sessionWinRate = 0;
 
+        let averageKills = 0;
+        let averageDeaths = 0;
+        let averageAssists = 0;
+
         if (sessionTotalGames > 0) {
             sessionWinRate = (sessionWins / sessionTotalGames) * 100;
+
+            averageKills = sessionKills / sessionTotalGames;
+            averageDeaths = sessionDeaths / sessionTotalGames;
+            averageAssists = sessionAssists / sessionTotalGames;
         }
 
         sessionItem.textContent = 
             "Session | Net RR: " + sessionRR +
             " | Wins: " + sessionWins +
             " | Losses: " + sessionLosses +
-            " | Win Rate: " + sessionWinRate.toFixed(1) + "%";
+            " | Win Rate: " + sessionWinRate.toFixed(1) + "%" +
+            " | Avg KDA: " + averageKills.toFixed(1) + "/" +
+                averageDeaths.toFixed(1) + "/" +
+                averageAssists.toFixed(1)
 
         sessionItem.appendChild(deleteSessionButton);
 

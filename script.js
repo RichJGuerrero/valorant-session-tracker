@@ -214,6 +214,7 @@ function renderMatches() {
         let averageKills = 0;
         let averageDeaths = 0;
         let averageAssists = 0;
+        let sessionKD = 0;
 
         if (sessionTotalGames > 0) {
             sessionWinRate = (sessionWins / sessionTotalGames) * 100;
@@ -221,6 +222,10 @@ function renderMatches() {
             averageKills = sessionKills / sessionTotalGames;
             averageDeaths = sessionDeaths / sessionTotalGames;
             averageAssists = sessionAssists / sessionTotalGames;
+
+            if (sessionDeaths > 0) {
+                sessionKD = sessionKills / sessionDeaths;
+            }
         }
 
         sessionItem.textContent = 
@@ -228,9 +233,10 @@ function renderMatches() {
             " | Wins: " + sessionWins +
             " | Losses: " + sessionLosses +
             " | Win Rate: " + sessionWinRate.toFixed(1) + "%" +
-            " | Avg KDA: " + averageKills.toFixed(1) + "/" +
-                averageDeaths.toFixed(1) + "/" +
-                averageAssists.toFixed(1)
+            " | K/D: " + sessionKD.toFixed(2) +
+            " | Avg Kills: " + averageKills.toFixed(1) + "/" +
+            " | Avg Deaths: " + averageDeaths.toFixed(1) + "/" +
+            " | Avg Assists: " + averageAssists.toFixed(1)
 
         sessionItem.appendChild(deleteSessionButton);
 

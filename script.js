@@ -215,6 +215,7 @@ function renderMatches() {
         let averageDeaths = 0;
         let averageAssists = 0;
         let sessionKD = 0;
+        let averageRR = 0;
 
         if (sessionTotalGames > 0) {
             sessionWinRate = (sessionWins / sessionTotalGames) * 100;
@@ -222,6 +223,7 @@ function renderMatches() {
             averageKills = sessionKills / sessionTotalGames;
             averageDeaths = sessionDeaths / sessionTotalGames;
             averageAssists = sessionAssists / sessionTotalGames;
+            averageRR = sessionRR / sessionTotalGames;
 
             if (sessionDeaths > 0) {
                 sessionKD = sessionKills / sessionDeaths;
@@ -230,6 +232,7 @@ function renderMatches() {
 
         sessionItem.textContent = 
             "Session | Net RR: " + sessionRR +
+            " | Average RR: " + averageRR.toFixed(1) +
             " | Wins: " + sessionWins +
             " | Losses: " + sessionLosses +
             " | Win Rate: " + sessionWinRate.toFixed(1) + "%" +

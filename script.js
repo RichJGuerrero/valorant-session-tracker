@@ -67,6 +67,7 @@ saveMatchButton.addEventListener("click", function() {
     }
 
     localStorage.setItem("sessions", JSON.stringify(sessions));
+
     renderMatches();
 
     agentInput.value = "";
@@ -94,7 +95,43 @@ function renderMatches() {
 
         const deleteSessionButton = document.createElement("button");
 
+        const sessionNoteInput = document.createElement("textArea");
+        sessionNoteInput.value = currentSession.notes || "";
+        sessionNoteInput.placeholder = "Session notes...";
+
+        const saveNoteButton = document.createElement("button");
+        saveNoteButton.textContent = "Save Note";
+
+        const deleteNoteButton = document.createElement("button");
+        deleteNoteButton.textContent = "Delete Note";
+
         deleteSessionButton.textContent = "Delete Session";
+
+        saveNoteButton.addEventListener("click", function() {
+            if (sessionNoteInput === "") {
+                return;
+            }
+
+            currentSession.notes = sessionNoteInput.value;
+
+            localStorage.setItem("sessions", JSON.stringify(sessions));
+
+            renderMatches();
+        });
+
+        deleteNoteButton.addEventListener("click", function() {
+            const confirmed = confirm("Delete this note?");
+
+            if (confirmed === false) {
+                return;
+            }
+
+            currentSession.notes = "";
+
+            localStorage.setItem("sessions", JSON.stringify(sessions))
+
+            renderMatches();
+        });
 
         deleteSessionButton.addEventListener("click", function() {
             const confirmed = confirm("Delete this session?");
@@ -243,10 +280,15 @@ function renderMatches() {
 
         sessionItem.appendChild(deleteSessionButton);
 
+        sessionItem.appendChild(sessionNoteInput);
+
+        sessionItem.appendChild(saveNoteButton);
+
+        sessionItem.appendChild(deleteNoteButton);
+
         sessionItem.appendChild(sessionMatchList);
 
-
-        matchHistoryList.appendChild(sessionItem);
+         matchHistoryList.appendChild(sessionItem);
     }
 
     const totalGames = wins + losses;
@@ -271,6 +313,7 @@ startSessionButton.addEventListener("click", function() {
         id: sessions.length + 1,
         startedAt: new Date().toISOString(),
         endedAt: null,
+        notes: "",
         matches: []
     };
 

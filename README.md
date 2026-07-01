@@ -1,47 +1,44 @@
-Valorant Session Tracker
+# Valorant Session Tracker
 
 A JavaScript web application for tracking Valorant competitive matches, RR gains/losses, and session performance.
 
-Features
+## Features
 
-* Start and end play sessions
-* Track individual match results
-* Record agent, map, RR change, kills, deaths, and assists
-* Automatically calculate Net RR for the active session
-* Save data using Local Storage
-* Restore sessions after refreshing the page
-* Delete individual matches
-* Delete entire sessions
+- Start and end play sessions
+- Persistent active sessions using localStorage
+- Agent and map dropdown selectors
+- Match tracking (RR, Kills, Deaths, Assists)
+- Session statistics
+- Session notes
+- Delete matches and sessions with confirmation
+- Basic UI styling
 
-Technologies Used
+## Technologies
 
-* HTML
-* CSS
-* JavaScript
-* Local Storage API
+- HTML
+- CSS
+- JavaScript
+- localStorage
 
-Future Features
+## How to Run
 
-* Session notes
-* Lifetime statistics
-* Win rate tracking
-* Agent-specific statistics
-* Match editing
-* Improved UI styling
-
-Running the Project
+### Option 1
 
 1. Clone the repository
 2. Open the project folder
-3. Open index.html in a browser
+3. Open `index.html` in a browser
 
 or
 
+### Option 2
+
 1. Open the project in VS Code
-2. Use Live Server
+2. Use the Live Server extension
 3. Open the local development URL
 
-## Version History
+---
+
+# Version History
 
 ### v0.2.0
 - Added session tracking
@@ -51,11 +48,11 @@ or
 - Added agent and map dropdowns
 - Added basic UI styling
 - Added newest-session-first display
-- Added Net RR, Wins, Losses, and Win Rate stats
+- Added Net RR, Wins, Losses, and Win Rate statistics
 
 ### Planned v0.3.0
-- Average kills/deaths/assists
-- K/D ratio
-- Average RR per match
-- Session notes
+- Average RR per match ✅
+- K/D ratio ✅
+- Average Kills, Deaths, and Assists ✅
+- Session notes ✅
 - Basic coaching insights

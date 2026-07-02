@@ -50,9 +50,14 @@ or
 - Added newest-session-first display
 - Added Net RR, Wins, Losses, and Win Rate statistics
 
-### Planned v0.3.0
+### v0.3.0
 - Average RR per match ✅
 - K/D ratio ✅
 - Average Kills, Deaths, and Assists ✅
 - Session notes ✅
+
+### Planned v0.4.0
+- Edit match
+- ACS tracking
+- ADR tracking
 - Basic coaching insights

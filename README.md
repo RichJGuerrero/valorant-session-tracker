@@ -57,7 +57,7 @@ or
 - Session notes ✅
 
 ### Planned v0.4.0
-- Edit match
+- Edit match ✅
 - ACS tracking
 - ADR tracking
 - Basic coaching insights

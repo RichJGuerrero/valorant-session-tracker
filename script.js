@@ -16,6 +16,8 @@ const matchHistoryList = document.getElementById("matchHistoryList");
 
 let sessions = [];
 let activeSessionId = null;
+let editingMatchIndex = null;
+let editingSessionIndex = null;
 
 const savedSessions = localStorage.getItem("sessions");
 
@@ -33,7 +35,9 @@ if (savedActiveSessionId !== null) {
 }
 
 saveMatchButton.addEventListener("click", function() {
-    if (activeSessionId === null) {
+    console.log("Save clicked:", editingSessionIndex, editingMatchIndex);
+
+    if (activeSessionId === null && editingMatchIndex === null && editingSessionIndex === null) {
         sessionStatus.textContent = "No active session. Please start a session.";
         return;
     }
@@ -56,13 +60,23 @@ saveMatchButton.addEventListener("click", function() {
         deaths: deathsInput.value,
         assists: assistsInput.value
     }
+    
+    if (editingSessionIndex !== null && editingMatchIndex !== null) {
+        console.log("Updating:", editingSessionIndex, editingMatchIndex, match);
+        sessions[editingSessionIndex].matches[editingMatchIndex] = match;
 
-    for (let index = 0; index < sessions.length; index++) {
-        const currentSession = sessions[index];
+         editingSessionIndex = null;
+         editingMatchIndex = null;
 
-        if (currentSession.id === activeSessionId) {
-            currentSession.matches.push(match);
-            break;
+        saveMatchButton.textContent = "Save Match";
+     } else {
+        for (let index = 0; index < sessions.length; index++) {
+            const currentSession = sessions[index];
+
+             if (currentSession.id === activeSessionId) {
+                currentSession.matches.push(match);
+                break;
+            }
         }
     }
 
@@ -212,6 +226,31 @@ function renderMatches() {
 
             deleteButton.textContent = "Delete";
 
+            const editButton = document.createElement("button");
+
+            editButton.textContent = "Edit";
+
+            editButton.addEventListener("click", function() {
+
+                editingMatchIndex = matchIndex;
+                editingSessionIndex = sessionIndex;
+
+                agentInput.value = match.agent;
+                mapInput.value = match.map;
+                rrChangeInput.value = match.rrChange;
+                killsInput.value = match.kills;
+                deathsInput.value = match.deaths;
+                assistsInput.value = match.assists;
+
+                if (match.result === "Win") {
+                    winRadio.checked = true;
+                } else if (match.result === "loss") {
+                    lossRadio.checked = true;
+                }
+
+                saveMatchButton.textContent = "Update Match";
+            })
+
             deleteButton.addEventListener("click", function() {
                 const confirmed = confirm("Delete This Match?");
 
@@ -238,6 +277,7 @@ function renderMatches() {
                 renderMatches();
             });
 
+            newMatch.appendChild(editButton);
             newMatch.appendChild(deleteButton);
 
             sessionMatchList.appendChild(newMatch);

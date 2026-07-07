@@ -58,6 +58,6 @@ or
 
 ### Planned v0.4.0
 - Edit match ✅
-- ACS tracking
+- ACS tracking ✅
 - ADR tracking
 - Basic coaching insights

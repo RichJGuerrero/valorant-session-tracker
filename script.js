@@ -10,6 +10,7 @@ const endSessionButton = document.getElementById("endSessionButton");
 const winRadio = document.getElementById("winRadio");
 const lossRadio = document.getElementById("lossRadio");
 const netRR = document.getElementById("netRR");
+const acsInput = document.getElementById("acsInput");
 const sessionSummary = document.getElementById("sessionSummary");
 const sessionStatus = document.getElementById("sessionStatus");
 const matchHistoryList = document.getElementById("matchHistoryList");
@@ -56,6 +57,7 @@ saveMatchButton.addEventListener("click", function() {
         map: mapInput.value,
         result: result,
         rrChange: rrChangeInput.value,
+        acs: acsInput.value,
         kills: killsInput.value,
         deaths: deathsInput.value,
         assists: assistsInput.value
@@ -87,6 +89,7 @@ saveMatchButton.addEventListener("click", function() {
     agentInput.value = "";
     mapInput.value = "";
     rrChangeInput.value = "";
+    acsInput.value = "";
     killsInput.value = "";
     deathsInput.value = "";
     assistsInput.value = "";
@@ -179,6 +182,7 @@ function renderMatches() {
         let sessionWins = 0;
         let sessionLosses = 0;
         let sessionKills = 0;
+        let sessionACS = 0;
         let sessionDeaths = 0;
         let sessionAssists = 0;
 
@@ -188,6 +192,7 @@ function renderMatches() {
             const match = currentSession.matches[matchIndex];
 
             sessionRR = sessionRR + parseInt(match.rrChange);
+            sessionACS = sessionACS + parseInt(match.acs) || 0;
             sessionKills = sessionKills + parseInt(match.kills);
             sessionDeaths = sessionDeaths + parseInt(match.deaths);
             sessionAssists = sessionAssists + parseInt(match.assists);
@@ -293,6 +298,7 @@ function renderMatches() {
         let averageAssists = 0;
         let sessionKD = 0;
         let averageRR = 0;
+        let averageACS = 0;
 
         if (sessionTotalGames > 0) {
             sessionWinRate = (sessionWins / sessionTotalGames) * 100;
@@ -301,6 +307,7 @@ function renderMatches() {
             averageDeaths = sessionDeaths / sessionTotalGames;
             averageAssists = sessionAssists / sessionTotalGames;
             averageRR = sessionRR / sessionTotalGames;
+            averageACS = sessionACS / sessionTotalGames;
 
             if (sessionDeaths > 0) {
                 sessionKD = sessionKills / sessionDeaths;
@@ -310,6 +317,7 @@ function renderMatches() {
         sessionItem.textContent = 
             "Session | Net RR: " + sessionRR +
             " | Average RR: " + averageRR.toFixed(1) +
+            " | Average ACS: " + averageACS.toFixed(1) +
             " | Wins: " + sessionWins +
             " | Losses: " + sessionLosses +
             " | Win Rate: " + sessionWinRate.toFixed(1) + "%" +
@@ -346,6 +354,7 @@ function renderMatches() {
 
     netRR.textContent = "Net RR: " + totalRR;
 
+    " | Avg ACS: " + averageACS.toFixed(1);
 }
 
 startSessionButton.addEventListener("click", function() {

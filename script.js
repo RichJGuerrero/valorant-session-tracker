@@ -83,8 +83,11 @@ saveMatchButton.addEventListener("click", function() {
     }
 
     localStorage.setItem("sessions", JSON.stringify(sessions));
+    console.log("Before Render");
 
     renderMatches();
+
+    console.log("After Render");
 
     agentInput.value = "";
     mapInput.value = "";
@@ -353,8 +356,6 @@ function renderMatches() {
         " | Win Rate: " + winRate.toFixed(1) + "%";
 
     netRR.textContent = "Net RR: " + totalRR;
-
-    " | Avg ACS: " + averageACS.toFixed(1);
 }
 
 startSessionButton.addEventListener("click", function() {
